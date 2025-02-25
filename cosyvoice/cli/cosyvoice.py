@@ -87,6 +87,29 @@ class CosyVoice:
                 logging.info('yield speech len {}, rtf {}'.format(speech_len, (time.time() - start_time) / speech_len))
                 yield model_output
                 start_time = time.time()
+                
+    def generate_spk_data(self, prompt_text, prompt_speech_16k, text_frontend=True):
+        prompt_text = self.frontend.text_normalize(prompt_text, split=False, text_frontend=text_frontend)
+        spk_data = self.frontend.frontend_zero_shot_spk(prompt_text, prompt_speech_16k, self.sample_rate)
+        return spk_data
+    
+    def inference_zero_shot_with_spk(self, tts_text, spk_data, stream=False, speed=1.0, text_frontend=True):
+        prompt_text = spk_data['prompt_ori_text']
+        for i in tqdm(self.frontend.text_normalize(tts_text, split=True, text_frontend=text_frontend)):
+            if (not isinstance(i, Generator)) and len(i) < 0.5 * len(prompt_text):
+                logging.warning('synthesis text {} too short than prompt text {}, this may lead to bad performance'.format(i, prompt_text))
+            tts_input = self.frontend.frontend_zero_shot_text(i)
+            model_input = spk_data
+            model_input['text'] = tts_input['text']
+            model_input['text_len'] = tts_input['text_len']
+            start_time = time.time()
+            logging.info('synthesis text {}'.format(i))
+            for model_output in self.model.tts(**model_input, stream=stream, speed=speed):
+                speech_len = model_output['tts_speech'].shape[1] / self.sample_rate
+                logging.info('yield speech len {}, rtf {}'.format(speech_len, (time.time() - start_time) / speech_len))
+                model_output['norm_text'] = model_input['text']
+                yield model_output
+                start_time = time.time()      
 
     def inference_cross_lingual(self, tts_text, prompt_speech_16k, stream=False, speed=1.0, text_frontend=True):
         for i in tqdm(self.frontend.text_normalize(tts_text, split=True, text_frontend=text_frontend)):
