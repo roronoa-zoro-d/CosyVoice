@@ -50,3 +50,8 @@ pretrained_models/*
 *_pb2_grpc.py
 *_pb2.py
 *.tar
+
+
+third_party/Matcha-TTS/*
+pretrained_models
+zoro/logs/
