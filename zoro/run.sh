@@ -1,6 +1,15 @@
 #! /bin/bash
 
-gpu_id=1
+
+if [ $# -ne 1 ];then
+    echo "Usage:  <gpu_id>"
+    exit 1
+fi
+
+gpu_id=$1
+echo "gpu_id: ${gpu_id}"
+
+exit
 
 export CUDA_VISIBLE_DEVICES=${gpu_id}
 
