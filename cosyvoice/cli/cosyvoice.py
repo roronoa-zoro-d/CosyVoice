@@ -94,7 +94,7 @@ class CosyVoice:
         return spk_data
     
     def inference_zero_shot_with_spk(self, tts_text, spk_data, stream=False, speed=1.0, text_frontend=True):
-        prompt_text = spk_data['prompt_ori_text']
+        prompt_text = spk_data['norm_prompt_text']
         for i in tqdm(self.frontend.text_normalize(tts_text, split=True, text_frontend=text_frontend)):
             if (not isinstance(i, Generator)) and len(i) < 0.5 * len(prompt_text):
                 logging.warning('synthesis text {} too short than prompt text {}, this may lead to bad performance'.format(i, prompt_text))
@@ -107,7 +107,7 @@ class CosyVoice:
             for model_output in self.model.tts(**model_input, stream=stream, speed=speed):
                 speech_len = model_output['tts_speech'].shape[1] / self.sample_rate
                 logging.info('yield speech len {}, rtf {}'.format(speech_len, (time.time() - start_time) / speech_len))
-                model_output['norm_text'] = model_input['text']
+                model_output['norm_text'] = i
                 yield model_output
                 start_time = time.time()      
 

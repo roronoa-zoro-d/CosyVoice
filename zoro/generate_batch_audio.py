@@ -106,7 +106,7 @@ if __name__ == '__main__':
         
         
         spk_data = cosyvoice.generate_spk_data(prompt_text, prompt_speech_16k)
-        prompt_text = spk_data['prompt_ori_text']
+        prompt_text = spk_data['norm_prompt_text']
         
         tts_texts = random.choices(txts, k=num_wav_per_spk)
         for j, txt in enumerate(tts_texts):

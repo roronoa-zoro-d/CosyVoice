@@ -189,7 +189,7 @@ class CosyVoiceFrontEnd:
             speech_feat, speech_feat_len[:] = speech_feat[:, :2 * token_len], 2 * token_len
             speech_token, speech_token_len[:] = speech_token[:, :token_len], token_len
         embedding = self._extract_spk_embedding(prompt_speech_16k)
-        model_input = {'prompt_ori_text':prompt_text,
+        model_input = {'norm_prompt_text':prompt_text,
                        'prompt_text': prompt_text_token, 'prompt_text_len': prompt_text_token_len,
                        'llm_prompt_speech_token': speech_token, 'llm_prompt_speech_token_len': speech_token_len,
                        'flow_prompt_speech_token': speech_token, 'flow_prompt_speech_token_len': speech_token_len,
