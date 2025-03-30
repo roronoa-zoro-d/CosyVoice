@@ -47,7 +47,7 @@ with open(txt_file, 'r', encoding='utf-8') as f:
     for line in f:
         txts.append(line.strip())
 print(f'read {len(txts)} txt ' )
-
+num_wav_per_spk = min(num_wav_per_spk, len(txts))
 
 # 加载音频文件
 def load_resample_audio(file_path, target_sample_rate=16000):
