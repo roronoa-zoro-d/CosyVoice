@@ -28,6 +28,7 @@ num_gpu = 4
 num_wav_per_spk = 100
 out_sample_rate=16000
 out_dir = '/data/nas/zhangjiayuan/experiment/paraformer_finitune/datas/tts_datas'
+out_dir = '/data/nas/dataset/asr-train/tts_generate_datas/data_xunfei'
 # clone-spk
 speech_root_dir = '/data/nas/emilia/Amphion___Emilia/raw/ZH'
 clone_data_file = 'select_spk.jsonl'
@@ -40,7 +41,8 @@ print(f'read {len(clone_datas)} clone_spk')
         
 # generate txt
 txts = []
-txt_file = 'finitune_corcups.txt'
+txt_file = 'tts_corcups/finitune_corcups.txt'   # 待合成的语料  依据热词选择的文本
+txt_file = 'tts_corcups/finetune_xunfei_corcups.txt'
 with open(txt_file, 'r', encoding='utf-8') as f:
     for line in f:
         txts.append(line.strip())
